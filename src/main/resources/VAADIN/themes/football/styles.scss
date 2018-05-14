@@ -1,0 +1,9 @@
+@import "../valo/valo";
+
+.football {
+  @include valo;
+  .my-label {
+    color: red;
+    font-size: 100px;
+  }
+}
