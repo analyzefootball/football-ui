@@ -22,6 +22,7 @@ dependencies {
     compile(
             ['org.springframework.boot:spring-boot-starter-web'],
             ['org.springframework.boot:spring-boot-starter-actuator'],
+            ['org.springframework.boot:spring-boot-starter-security'],
             ['com.vaadin:vaadin-spring-boot-starter:3.0.0'],
             ['org.slf4j:slf4j-api:1.7.25']
     )

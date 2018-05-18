@@ -6,8 +6,13 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
+/**
+ * @author hassan
+ * @since 5/13/18
+ */
+
 @Theme("football")
-@SpringUI
+@SpringUI(path="/")
 public class ApplicationUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
