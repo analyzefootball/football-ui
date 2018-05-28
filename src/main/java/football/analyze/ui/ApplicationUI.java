@@ -22,11 +22,11 @@ import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.design.DesignItem;
 
+@SpringUI
 @Theme("football")
 @Title("Fifa 2018 World Cup")
 @Push
 @PushStateNavigation
-@SpringUI
 public class ApplicationUI extends UI implements DetachListener {
 
     private HybridMenu hybridMenu = null;
