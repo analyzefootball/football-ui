@@ -1,4 +1,4 @@
-package football.analyze.ui;
+package football.analyze.main;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -11,18 +11,16 @@ import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.JavaScript;
-import com.vaadin.ui.JavaScriptFunction;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import elemental.json.JsonArray;
-import football.analyze.ui.page.*;
+import football.analyze.main.components.TopButton;
+import football.analyze.main.page.*;
 import kaesdingeling.hybridmenu.HybridMenu;
 import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.design.DesignItem;
 
-@SpringUI
+@SpringUI(path = "/")
 @Theme("football")
 @Title("Fifa 2018 World Cup")
 @Push
@@ -37,6 +35,10 @@ public class ApplicationUI extends UI implements DetachListener {
                 .withNaviContent(new VerticalLayout())
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
                 .build();
+
+        hybridMenu.getNotificationCenter()
+                .setNotiButton(HMButton.get()
+                        .withDescription("Notifications"));
 
         buildTopOnlyMenu();
         buildLeftMenu();
@@ -69,25 +71,28 @@ public class ApplicationUI extends UI implements DetachListener {
 
     private void buildTopOnlyMenu() {
         TopMenu topMenu = hybridMenu.getTopMenu();
+        topMenu.setDefaultComponentAlignment(Alignment.TOP_RIGHT);
 
-        topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
+        topMenu.add(TopButton.get()
+                    .withIcon(VaadinIcons.USER)
+                    .withNavigateTo(MemberPage.class)
+                    .withDescription("My Profile")
+                    );
 
-        topMenu.add(HMButton.get()
-                .withIcon(VaadinIcons.HOME)
-                .withDescription("Home")
-                .withNavigateTo(HomePage.class));
+        topMenu.add(TopButton.get()
+                .withIcon(VaadinIcons.EXIT)
+                .withNavigateTo("/login")
+                .withDescription("Logout")
+        );
 
-        hybridMenu.getNotificationCenter()
-                .setNotiButton(topMenu.add(HMButton.get()
-                        .withDescription("Notifications")));
     }
 
     private void buildLeftMenu() {
         LeftMenu leftMenu = hybridMenu.getLeftMenu();
 
         leftMenu.add(HMLabel.get()
-                .withCaption("<b>Hybrid</b> Menu")
-                .withIcon(new ThemeResource("images/hybridmenu-Logo.png")));
+                .withCaption("<b>Fifa 2018 World Cup</b>")
+                .withIcon(new ThemeResource("images/fifa2018.png")));
 
         hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
                 .withCaption("Home")
@@ -164,6 +169,7 @@ public class ApplicationUI extends UI implements DetachListener {
 
     @Override
     public void detach(DetachEvent event) {
+        super.detach();
         getUI().close();
     }
 }

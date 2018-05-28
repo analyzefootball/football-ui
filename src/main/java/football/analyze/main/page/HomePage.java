@@ -1,4 +1,4 @@
-package football.analyze.ui.page;
+package football.analyze.main.page;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

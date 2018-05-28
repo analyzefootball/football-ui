@@ -1,10 +1,10 @@
-package football.analyze.ui.page;
+package football.analyze.main.page;
 
 import com.google.gson.Gson;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.*;
-import football.analyze.ui.ApplicationUI;
+import football.analyze.main.ApplicationUI;
 import kaesdingeling.hybridmenu.components.ColorPicker;
 import kaesdingeling.hybridmenu.design.DesignColor;
 import kaesdingeling.hybridmenu.design.DesignItem;
