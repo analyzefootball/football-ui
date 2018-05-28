@@ -6,6 +6,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ClientConnector.DetachListener;
 import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
@@ -26,7 +27,7 @@ import kaesdingeling.hybridmenu.design.DesignItem;
 @Push
 @PushStateNavigation
 @SpringUI
-public class ApplicationUI extends UI {
+public class ApplicationUI extends UI implements DetachListener {
 
     private HybridMenu hybridMenu = null;
 
@@ -34,7 +35,7 @@ public class ApplicationUI extends UI {
     protected void init(VaadinRequest request) {
         hybridMenu = HybridMenu.get()
                 .withNaviContent(new VerticalLayout())
-                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getDarkDesign()))
+                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
                 .build();
 
         buildTopOnlyMenu();
@@ -159,5 +160,10 @@ public class ApplicationUI extends UI {
 
     public HybridMenu getHybridMenu() {
         return hybridMenu;
+    }
+
+    @Override
+    public void detach(DetachEvent event) {
+        getUI().close();
     }
 }

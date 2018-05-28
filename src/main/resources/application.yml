@@ -7,3 +7,4 @@ management:
 vaadin:
   servlet:
     production-mode: true
+    close-idle-sessions: true
