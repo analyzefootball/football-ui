@@ -10,11 +10,13 @@ import com.vaadin.server.ClientConnector.DetachListener;
 import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import elemental.json.JsonArray;
 import football.analyze.main.components.TopButton;
 import football.analyze.main.page.*;
+import football.analyze.main.security.SecurityFilter;
 import kaesdingeling.hybridmenu.HybridMenu;
 import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
@@ -55,6 +57,8 @@ public class ApplicationUI extends UI implements DetachListener {
             }
         });
 
+        getNavigator().addViewChangeListener(new SecurityFilter(getUI()));
+
         setContent(hybridMenu);
 
         JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
@@ -74,15 +78,16 @@ public class ApplicationUI extends UI implements DetachListener {
         topMenu.setDefaultComponentAlignment(Alignment.TOP_RIGHT);
 
         topMenu.add(TopButton.get()
-                    .withIcon(VaadinIcons.USER)
-                    .withNavigateTo(MemberPage.class)
-                    .withDescription("My Profile")
-                    );
+                .withIcon(VaadinIcons.USER)
+                .withNavigateTo(MemberPage.class)
+                .withDescription("My Profile")
+        );
 
         topMenu.add(TopButton.get()
                 .withIcon(VaadinIcons.EXIT)
                 .withNavigateTo("/login")
                 .withDescription("Logout")
+                .withClickListener((Button.ClickListener) event -> VaadinSession.getCurrent().close())
         );
 
     }

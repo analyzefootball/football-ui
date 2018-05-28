@@ -4,13 +4,14 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.Position;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import football.analyze.main.security.SecurityService;
+import football.analyze.main.security.User;
 
 @SpringUI(path = "/login")
 @Theme("football")
@@ -26,6 +27,12 @@ public class LoginUI extends UI {
 
     private Label loginFailedLabel;
     private Label loggedOutLabel;
+
+    private final SecurityService securityService;
+
+    public LoginUI(SecurityService securityService) {
+        this.securityService = securityService;
+    }
 
     @Override
     protected void init(VaadinRequest request) {
@@ -68,17 +75,11 @@ public class LoginUI extends UI {
         CssLayout labels = new CssLayout();
         labels.addStyleName("labels");
 
-        Label welcome = new Label("Welcome");
+        Label welcome = new Label("Fifa 2018 World Cup");
         welcome.setSizeUndefined();
         welcome.addStyleName(ValoTheme.LABEL_H4);
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
-
-        Label title = new Label("Project Template");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H3);
-        title.addStyleName(ValoTheme.LABEL_LIGHT);
-        labels.addComponent(title);
         return labels;
     }
 
@@ -107,6 +108,14 @@ public class LoginUI extends UI {
     }
 
     private void login() {
-        getUI().getPage().setLocation("/");
+        User user = securityService.authenticate(username.getValue(), password.getValue());
+        if (user!=null && user.getCredentials()!=null && user.getCredentials().getJwtToken()!=null) {
+            VaadinSession.getCurrent().setAttribute("JWT_TOKEN", "something");
+            getUI().getPage().setLocation("/");
+        }
+        else    {
+            login.setEnabled(true);
+            Notification.show("Invalid Username/Password", Notification.Type.ERROR_MESSAGE);
+        }
     }
 }

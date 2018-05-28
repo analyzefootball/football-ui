@@ -28,7 +28,11 @@ dependencies {
             ['com.vaadin:vaadin-push:8.2.0'],
             ['com.vaadin:vaadin-icons:3.0.1'],
             ['com.google.code.gson:gson:2.8.5'],
+            ['org.apache.commons:commons-lang3:3.7'],
             ['org.slf4j:slf4j-api:1.7.25']
+    )
+    compileOnly(
+            ['org.projectlombok:lombok']
     )
     testCompile(
             ['junit:junit:4.12'],
