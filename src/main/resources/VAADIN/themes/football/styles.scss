@@ -1,9 +1,14 @@
-@import "../valo/valo";
+@import "../valo/valo.scss";
+@import "../../../../../../../HybridMenu-addon/src/main/webapp/VAADIN/addons/hybrid-menu/hybrid-menu.scss";
+
+/*
+$gray: #d1d1cf;
+$green: #40b527;
+$darkgreen: darken($green, 30%);
+*/
+
 
 .football {
-  @include valo;
-  .my-label {
-    color: red;
-    font-size: 100px;
-  }
+	@include valo;
+    @include hybrid-menu;
 }
