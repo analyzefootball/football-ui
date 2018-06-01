@@ -1,6 +1,7 @@
 package football.analyze.main.security;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Hassan Mushtaq
@@ -8,6 +9,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DefaultSecurityService implements SecurityService {
+
+    private final RestTemplate restTemplate;
+
+    public DefaultSecurityService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @Override
     public User authenticate(String username, String password) {
         return null;

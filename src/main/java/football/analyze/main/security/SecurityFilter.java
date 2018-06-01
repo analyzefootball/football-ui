@@ -22,7 +22,7 @@ public class SecurityFilter implements ViewChangeListener {
     public boolean beforeViewChange(ViewChangeEvent event) {
         boolean loggedOut = StringUtils.isBlank((String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN"));
         if (loggedOut) {
-            ui.getPage().setLocation("/login");
+            ui.getPage().setLocation("/Login");
         }
         return true;
     }

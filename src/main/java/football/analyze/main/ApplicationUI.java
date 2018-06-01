@@ -38,7 +38,7 @@ public class ApplicationUI extends UI implements DetachListener {
     @Override
     protected void init(VaadinRequest request) {
         hybridMenu = HybridMenu.get()
-                .withNaviContent(new HomePage())
+                .withNaviContent(new Home())
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
                 .build();
 
@@ -64,7 +64,7 @@ public class ApplicationUI extends UI implements DetachListener {
 
         setContent(hybridMenu);
 
-        getNavigator().navigateTo("HomePage");
+        getNavigator().navigateTo("Home");
 
         JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
             private static final long serialVersionUID = 1L;
@@ -88,43 +88,43 @@ public class ApplicationUI extends UI implements DetachListener {
         hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
                 .withCaption("Home")
                 .withIcon(VaadinIcons.HOME)
-                .withNavigateTo(HomePage.class)));
+                .withNavigateTo(Home.class)));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Predictions")
                 .withIcon(VaadinIcons.MEGAFONE)
-                .withNavigateTo(PredictionPage.class));
+                .withNavigateTo(Prediction.class));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Points")
                 .withIcon(VaadinIcons.TABLE)
-                .withNavigateTo(PointsPage.class));
+                .withNavigateTo(Points.class));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Schedule")
                 .withIcon(VaadinIcons.CALENDAR)
-                .withNavigateTo(SchedulePage.class));
+                .withNavigateTo(Schedule.class));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Group")
                 .withIcon(VaadinIcons.BAR_CHART)
-                .withNavigateTo(GroupPage.class));
+                .withNavigateTo(Group.class));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Profile")
                 .withIcon(VaadinIcons.USER)
-                .withNavigateTo(ProfilePage.class));
+                .withNavigateTo(Profile.class));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Administration")
                 .withIcon(VaadinIcons.USERS)
-                .withNavigateTo(AdminPage.class));
+                .withNavigateTo(Admin.class));
 
         leftMenu.add(HMButton.get()
                 .withCaption("Sign Out")
                 .withIcon(VaadinIcons.SIGN_OUT)
                 .withClickListener((Button.ClickListener) event -> {
-                            getUI().getPage().setLocation("/login");
+                            getUI().getPage().setLocation("/Login");
                             VaadinSession.getCurrent().close();
                         }
                 ));
@@ -152,12 +152,12 @@ public class ApplicationUI extends UI implements DetachListener {
 //        memberList.add(HMButton.get()
 //                .withCaption("Member")
 //                .withIcon(VaadinIcons.USERS)
-//                .withNavigateTo(MemberPage.class));
+//                .withNavigateTo(Member.class));
 //
 //        memberList.add(HMButton.get()
 //                .withCaption("Group")
 //                .withIcon(VaadinIcons.USERS)
-//                .withNavigateTo(GroupPage.class));
+//                .withNavigateTo(Group.class));
 //
 //        HMSubMenu memberListTwo = memberList.add(HMSubMenu.get()
 //                .withCaption("Member")
@@ -171,7 +171,7 @@ public class ApplicationUI extends UI implements DetachListener {
 //        memberListTwo.add(HMButton.get()
 //                .withCaption("Member")
 //                .withIcon(VaadinIcons.USERS)
-//                .withNavigateTo(MemberPage.class));
+//                .withNavigateTo(Member.class));
 //
 //
 //        HMSubMenu demoSettings = leftMenu.add(HMSubMenu.get()

@@ -5,7 +5,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class PredictionPage extends VerticalLayout implements View {
+public class Prediction extends VerticalLayout implements View {
     private static final long serialVersionUID = 1L;
 
     @Override
