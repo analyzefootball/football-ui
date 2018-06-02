@@ -1,6 +1,6 @@
-package football.analyze.main.security;
+package football.analyze.security;
 
-import football.analyze.main.common.Entity;
+import football.analyze.common.Entity;
 import lombok.Getter;
 
 /**

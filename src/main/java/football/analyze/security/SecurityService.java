@@ -1,4 +1,4 @@
-package football.analyze.main.security;
+package football.analyze.security;
 
 /**
  * @author Hassan Mushtaq

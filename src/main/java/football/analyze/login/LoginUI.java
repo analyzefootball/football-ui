@@ -10,8 +10,10 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import football.analyze.main.security.SecurityService;
-import football.analyze.main.security.User;
+import football.analyze.events.LoginEvent;
+import football.analyze.security.SecurityService;
+import football.analyze.security.User;
+import org.springframework.context.ApplicationContext;
 
 @SpringUI(path = "/Login")
 @Theme("football")
@@ -109,13 +111,15 @@ public class LoginUI extends UI {
     private void login() {
         User user = securityService.authenticate(username.getValue(), password.getValue());
         //if (user != null && user.getCredentials() != null && user.getCredentials().getJwtToken() != null) {
-            VaadinSession.getCurrent().setAttribute("JWT_TOKEN", "something");
-            VaadinSession.getCurrent().getSession().setMaxInactiveInterval(1800);
-            getUI().getPage().setLocation("/");
+        VaadinSession.getCurrent().setAttribute("JWT_TOKEN", "something");
+        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(1800);
+        //applicationContext.publishEvent(new LoginEvent());
+        //menu.showAdmin();
+        getUI().getPage().setLocation("/");
         //}
         //else    {
-            login.setEnabled(true);
-          //  Notification.show("Invalid Username/Password", Notification.Type.ERROR_MESSAGE);
+        login.setEnabled(true);
+        //  Notification.show("Invalid Username/Password", Notification.Type.ERROR_MESSAGE);
         //}
     }
 }

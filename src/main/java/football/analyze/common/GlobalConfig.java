@@ -1,5 +1,6 @@
-package football.analyze.main.common;
+package football.analyze.common;
 
+import com.google.common.eventbus.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -9,10 +10,15 @@ import org.springframework.web.client.RestTemplate;
  * @since 5/28/18
  */
 @Configuration
-public class RestConfig {
+public class GlobalConfig {
 
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public EventBus eventBus()  {
+        return new EventBus();
     }
 }

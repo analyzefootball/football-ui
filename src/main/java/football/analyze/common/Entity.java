@@ -1,4 +1,4 @@
-package football.analyze.main.common;
+package football.analyze.common;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package football.analyze.main.security;
+package football.analyze.security;
 
 import lombok.Getter;
 

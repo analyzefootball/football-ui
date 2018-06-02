@@ -27,6 +27,7 @@ dependencies {
             ['org.vaadin.addons:hybridmenu:3.0.8'],
             ['com.vaadin:vaadin-push:8.2.0'],
             ['com.vaadin:vaadin-icons:3.0.1'],
+            ['com.google.guava:guava:25.1-jre'],
             ['com.google.code.gson:gson:2.8.5'],
             ['org.apache.commons:commons-lang3:3.7'],
             ['org.slf4j:slf4j-api:1.7.25']

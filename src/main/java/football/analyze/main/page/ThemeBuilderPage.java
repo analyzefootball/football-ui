@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.*;
-import football.analyze.main.ApplicationUI;
 import kaesdingeling.hybridmenu.components.ColorPicker;
 import kaesdingeling.hybridmenu.design.DesignColor;
 import kaesdingeling.hybridmenu.design.DesignItem;
@@ -70,7 +69,7 @@ public class ThemeBuilderPage extends VerticalLayout implements View {
 
         addComponents(title, defaultThemes, colorsForm, contentBackgroundForm, notificationForm, leftMenuForm, tooltip, jsonOutput/*, importButton*/);
 
-        designItem = ((ApplicationUI) UI.getCurrent()).getHybridMenu().getConfig().getDesignItem();
+        //designItem = ((ApplicationUI) UI.getCurrent()).getHybridMenu().getConfig().getDesignItem();
 
         load();
 		
@@ -153,7 +152,7 @@ public class ThemeBuilderPage extends VerticalLayout implements View {
 
     private void update() {
         write();
-        ((ApplicationUI) UI.getCurrent()).getHybridMenu().switchTheme(designItem);
+        //((ApplicationUI) UI.getCurrent()).getHybridMenu().switchTheme(designItem);
         jsonOutput.setValue(new Gson().toJson(designItem));
     }
 

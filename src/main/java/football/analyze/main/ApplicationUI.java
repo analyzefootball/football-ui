@@ -1,14 +1,13 @@
 package football.analyze.main;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.PushStateNavigation;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ClientConnector.DetachListener;
 import com.vaadin.server.Page;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
@@ -17,14 +16,9 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.UI;
 import elemental.json.JsonArray;
-import football.analyze.main.page.*;
-import football.analyze.main.security.SecurityFilter;
-import kaesdingeling.hybridmenu.HybridMenu;
-import kaesdingeling.hybridmenu.components.HMButton;
-import kaesdingeling.hybridmenu.components.HMLabel;
-import kaesdingeling.hybridmenu.components.LeftMenu;
-import kaesdingeling.hybridmenu.data.MenuConfig;
-import kaesdingeling.hybridmenu.design.DesignItem;
+import football.analyze.events.LoginEvent;
+
+import javax.annotation.PreDestroy;
 
 @SpringUI(path = "/")
 @Theme("football")
@@ -33,38 +27,27 @@ import kaesdingeling.hybridmenu.design.DesignItem;
 @PushStateNavigation
 public class ApplicationUI extends UI implements DetachListener {
 
-    private HybridMenu hybridMenu = null;
+    private Menu menu;
+
+    private final EventBus eventBus;
+
+    public ApplicationUI(EventBus eventBus) {
+        this.eventBus = eventBus;
+
+    }
 
     @Override
     protected void init(VaadinRequest request) {
-        hybridMenu = HybridMenu.get()
-                .withNaviContent(new Home())
-                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
-                .build();
-
-        hybridMenu.getNotificationCenter()
-                .setNotiButton(HMButton.get()
-                        .withDescription("Notifications"));
-
-        buildLeftMenu();
-
-        getNavigator().addViewChangeListener(new ViewChangeListener() {
-            private static final long serialVersionUID = -1840309356612297980L;
-
-            @Override
-            public boolean beforeViewChange(ViewChangeEvent event) {
-                if (event.getOldView() != null && event.getOldView().getClass().getSimpleName().equals(ThemeBuilderPage.class.getSimpleName())) {
-                    hybridMenu.switchTheme(DesignItem.getDarkDesign());
-                }
-                return true;
-            }
+        this.menu = new Menu();
+        eventBus.register(this);
+        menu.addSignOutListener((Button.ClickListener) event -> {
+            getUI().getPage().setLocation("/Login");
+            VaadinSession.getCurrent().close();
         });
+        setContent(menu.getHybridMenu());
 
-        getNavigator().addViewChangeListener(new SecurityFilter(getUI()));
+        getNavigator().addViewChangeListener(new ViewChangeFilter(getUI()));
 
-        setContent(hybridMenu);
-
-        getNavigator().navigateTo("Home");
 
         JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
             private static final long serialVersionUID = 1L;
@@ -76,131 +59,23 @@ public class ApplicationUI extends UI implements DetachListener {
         });
 
         Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function (e) { var e = e || window.event; aboutToClose(); return; };");
+
+        getNavigator().navigateTo("Home");
     }
 
-    private void buildLeftMenu() {
-        LeftMenu leftMenu = hybridMenu.getLeftMenu();
-
-        leftMenu.add(HMLabel.get()
-                .withCaption("<b>Fifa 2018 World Cup</b>")
-                .withIcon(new ThemeResource("images/fifa2018.png")));
-
-        hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
-                .withCaption("Home")
-                .withIcon(VaadinIcons.HOME)
-                .withNavigateTo(Home.class)));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Predictions")
-                .withIcon(VaadinIcons.MEGAFONE)
-                .withNavigateTo(Prediction.class));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Points")
-                .withIcon(VaadinIcons.TABLE)
-                .withNavigateTo(Points.class));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Schedule")
-                .withIcon(VaadinIcons.CALENDAR)
-                .withNavigateTo(Schedule.class));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Group")
-                .withIcon(VaadinIcons.BAR_CHART)
-                .withNavigateTo(Group.class));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Profile")
-                .withIcon(VaadinIcons.USER)
-                .withNavigateTo(Profile.class));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Administration")
-                .withIcon(VaadinIcons.USERS)
-                .withNavigateTo(Admin.class));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Sign Out")
-                .withIcon(VaadinIcons.SIGN_OUT)
-                .withClickListener((Button.ClickListener) event -> {
-                            getUI().getPage().setLocation("/Login");
-                            VaadinSession.getCurrent().close();
-                        }
-                ));
-
-
-//        leftMenu.add(HMButton.get()
-//                .withCaption("Notification Builder")
-//                .withIcon(VaadinIcons.BELL)
-//                .withNavigateTo(NotificationBuilderPage.class));
-//
-//        leftMenu.add(HMButton.get()
-//                .withCaption("Theme Builder")
-//                .withIcon(VaadinIcons.WRENCH)
-//                .withNavigateTo(ThemeBuilderPage.class));
-//
-//        HMSubMenu memberList = leftMenu.add(HMSubMenu.get()
-//                .withCaption("Member")
-//                .withIcon(VaadinIcons.USERS));
-//
-//        memberList.add(HMButton.get()
-//                .withCaption("Settings")
-//                .withIcon(VaadinIcons.COGS)
-//                .withNavigateTo(SettingsPage.class));
-//
-//        memberList.add(HMButton.get()
-//                .withCaption("Member")
-//                .withIcon(VaadinIcons.USERS)
-//                .withNavigateTo(Member.class));
-//
-//        memberList.add(HMButton.get()
-//                .withCaption("Group")
-//                .withIcon(VaadinIcons.USERS)
-//                .withNavigateTo(Group.class));
-//
-//        HMSubMenu memberListTwo = memberList.add(HMSubMenu.get()
-//                .withCaption("Member")
-//                .withIcon(VaadinIcons.USERS));
-//
-//        memberListTwo.add(HMButton.get()
-//                .withCaption("Settings")
-//                .withIcon(VaadinIcons.COGS)
-//                .withNavigateTo(SettingsPage.class));
-//
-//        memberListTwo.add(HMButton.get()
-//                .withCaption("Member")
-//                .withIcon(VaadinIcons.USERS)
-//                .withNavigateTo(Member.class));
-//
-//
-//        HMSubMenu demoSettings = leftMenu.add(HMSubMenu.get()
-//                .withCaption("Settings")
-//                .withIcon(VaadinIcons.COGS));
-//
-//        demoSettings.add(HMButton.get()
-//                .withCaption("White Theme")
-//                .withIcon(VaadinIcons.PALETE)
-//                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getWhiteDesign())));
-//
-//        demoSettings.add(HMButton.get()
-//                .withCaption("Dark Theme")
-//                .withIcon(VaadinIcons.PALETE)
-//                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getDarkDesign())));
-//
-//        demoSettings.add(HMButton.get()
-//                .withCaption("Minimal")
-//                .withIcon(VaadinIcons.COG)
-//                .withClickListener(e -> hybridMenu.getLeftMenu().toggleSize()));
+    @Subscribe
+    void something(LoginEvent event) {
+        menu.showAdmin();
     }
 
-    public HybridMenu getHybridMenu() {
-        return hybridMenu;
+    @PreDestroy
+    void destroy() {
+        super.detach();
+        getUI().close();
     }
 
     @Override
     public void detach(DetachEvent event) {
-        super.detach();
-        getUI().close();
+        destroy();
     }
 }
