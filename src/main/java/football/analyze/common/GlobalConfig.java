@@ -1,6 +1,5 @@
 package football.analyze.common;
 
-import com.google.common.eventbus.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -15,10 +14,5 @@ public class GlobalConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
-    }
-
-    @Bean
-    public EventBus eventBus()  {
-        return new EventBus();
     }
 }

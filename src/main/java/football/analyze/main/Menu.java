@@ -25,7 +25,7 @@ public class Menu {
     @Getter
     private HybridMenu hybridMenu;
 
-    public Menu() {
+    public Menu(boolean admin) {
         hybridMenu = HybridMenu.get()
                 .withNaviContent(new Home())
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
@@ -70,14 +70,12 @@ public class Menu {
                 .withCaption("Profile")
                 .withIcon(VaadinIcons.USER)
                 .withNavigateTo(Profile.class));
-        this.adminButton = HMButton.get()
-                .withCaption("Administration")
-                .withIcon(VaadinIcons.USERS)
-                .withNavigateTo(Admin.class);
-        adminButton.setVisible(false);
-
-        leftMenu.add(adminButton);
-
+        if (admin) {
+            leftMenu.add(HMButton.get()
+                    .withCaption("Administration")
+                    .withIcon(VaadinIcons.USERS)
+                    .withNavigateTo(Admin.class));
+        }
         signOutButton = HMButton.get()
                 .withCaption("Sign Out")
                 .withIcon(VaadinIcons.SIGN_OUT);
@@ -88,9 +86,5 @@ public class Menu {
 
     public void addSignOutListener(Button.ClickListener listener) {
         signOutButton.addClickListener(listener);
-    }
-
-    public void showAdmin() {
-        adminButton.setVisible(true);
     }
 }

@@ -1,7 +1,5 @@
 package football.analyze.main;
 
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -16,7 +14,7 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.UI;
 import elemental.json.JsonArray;
-import football.analyze.events.LoginEvent;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PreDestroy;
 
@@ -25,29 +23,29 @@ import javax.annotation.PreDestroy;
 @Title("Fifa 2018 World Cup")
 @Push
 @PushStateNavigation
+@Slf4j
 public class ApplicationUI extends UI implements DetachListener {
 
     private Menu menu;
 
-    private final EventBus eventBus;
-
-    public ApplicationUI(EventBus eventBus) {
-        this.eventBus = eventBus;
-
-    }
-
     @Override
     protected void init(VaadinRequest request) {
-        this.menu = new Menu();
-        eventBus.register(this);
+        String jwtToken = (String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN");
+        if (jwtToken != null && jwtToken.equals("something")) {
+            log.error("Logged in");
+            this.menu = new Menu(true);
+        } else {
+            this.menu = new Menu(false);
+        }
+
         menu.addSignOutListener((Button.ClickListener) event -> {
             getUI().getPage().setLocation("/Login");
             VaadinSession.getCurrent().close();
         });
-        setContent(menu.getHybridMenu());
 
         getNavigator().addViewChangeListener(new ViewChangeFilter(getUI()));
 
+        setContent(menu.getHybridMenu());
 
         JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
             private static final long serialVersionUID = 1L;
@@ -61,11 +59,6 @@ public class ApplicationUI extends UI implements DetachListener {
         Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function (e) { var e = e || window.event; aboutToClose(); return; };");
 
         getNavigator().navigateTo("Home");
-    }
-
-    @Subscribe
-    void something(LoginEvent event) {
-        menu.showAdmin();
     }
 
     @PreDestroy

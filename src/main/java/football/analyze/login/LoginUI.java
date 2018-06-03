@@ -10,10 +10,8 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import football.analyze.events.LoginEvent;
 import football.analyze.security.SecurityService;
 import football.analyze.security.User;
-import org.springframework.context.ApplicationContext;
 
 @SpringUI(path = "/Login")
 @Theme("football")
