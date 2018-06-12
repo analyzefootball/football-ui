@@ -15,3 +15,4 @@ football:
     endpoints:
       login: ${BASE_URL}/login
       tournament: ${BASE_URL}/tournaments
+      invitation: ${BASE_URL}/invitations

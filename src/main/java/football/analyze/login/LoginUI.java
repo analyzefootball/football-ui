@@ -87,10 +87,12 @@ public class LoginUI extends UI {
 
         username = new TextField("Username");
         username.setIcon(VaadinIcons.USER);
+        username.setWidth("300px");
         username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
         password = new PasswordField("Password");
         password.setIcon(VaadinIcons.LOCK);
+        password.setWidth("300px");
         password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
         login = new Button("Login");

@@ -1,5 +1,6 @@
 package football.analyze.security;
 
+import football.analyze.provision.Invitation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -22,10 +23,14 @@ public class DefaultSecurityService implements SecurityService {
 
     private final String loginURL;
 
+    private final String invitationURL;
+
     public DefaultSecurityService(RestTemplate restTemplate,
-                                  @Value("${football.service.endpoints.login}") String loginURL) {
+                                  @Value("${football.service.endpoints.login}") String loginURL,
+                                  @Value("${football.service.endpoints.invitation}") String invitationURL) {
         this.restTemplate = restTemplate;
         this.loginURL = loginURL;
+        this.invitationURL = invitationURL;
     }
 
     @Override
@@ -38,6 +43,17 @@ public class DefaultSecurityService implements SecurityService {
             return headers.getFirst(HEADER_STRING);
         } catch (Exception e) {
             log.error("Login error", e);
+            return null;
+        }
+    }
+
+    @Override
+    public String fetchInviteEmail(String invitationId) {
+        try {
+            ResponseEntity<Invitation> responseEntity = restTemplate.getForEntity(invitationURL + "/" + invitationId, Invitation.class);
+            return responseEntity.getBody().getEmail();
+        } catch (Exception e) {
+            log.error("Invitation error", e);
             return null;
         }
     }

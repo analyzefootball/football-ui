@@ -8,4 +8,5 @@ public interface SecurityService {
 
     String authenticate(String username, String password);
 
+    String fetchInviteEmail(String invitationId);
 }
