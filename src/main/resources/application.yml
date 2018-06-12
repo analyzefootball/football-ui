@@ -16,3 +16,4 @@ football:
       login: ${BASE_URL}/login
       tournament: ${BASE_URL}/tournaments
       invitation: ${BASE_URL}/invitations
+      register: ${BASE_URL}/signup

@@ -3,6 +3,7 @@ package football.analyze.security;
 import football.analyze.common.Entity;
 import football.analyze.main.data.play.Team;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Hassan Mushtaq
@@ -10,6 +11,7 @@ import lombok.Getter;
  */
 
 @Getter
+@Setter
 public class User extends Entity {
 
     private String displayName;

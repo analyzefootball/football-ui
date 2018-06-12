@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,12 +26,16 @@ public class DefaultSecurityService implements SecurityService {
 
     private final String invitationURL;
 
+    private final String signupURL;
+
     public DefaultSecurityService(RestTemplate restTemplate,
                                   @Value("${football.service.endpoints.login}") String loginURL,
-                                  @Value("${football.service.endpoints.invitation}") String invitationURL) {
+                                  @Value("${football.service.endpoints.invitation}") String invitationURL,
+                                  @Value("${football.service.endpoints.register}") String signupURL) {
         this.restTemplate = restTemplate;
         this.loginURL = loginURL;
         this.invitationURL = invitationURL;
+        this.signupURL = signupURL;
     }
 
     @Override
@@ -48,13 +53,20 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
-    public String fetchInviteEmail(String invitationId) {
+    public Invitation fetchInviteEmail(String invitationId) {
         try {
             ResponseEntity<Invitation> responseEntity = restTemplate.getForEntity(invitationURL + "/" + invitationId, Invitation.class);
-            return responseEntity.getBody().getEmail();
+            return responseEntity.getBody();
         } catch (Exception e) {
             log.error("Invitation error", e);
             return null;
         }
+    }
+
+    @Override
+    public boolean registerUser(String invitationId, User user) {
+        HttpEntity<User> entity = new HttpEntity<>(user);
+        ResponseEntity<Void> response = restTemplate.postForEntity(signupURL + "/" + invitationId, entity, Void.class);
+        return response.getStatusCode().equals(HttpStatus.CREATED);
     }
 }
