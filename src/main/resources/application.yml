@@ -8,3 +8,10 @@ vaadin:
   servlet:
     production-mode: true
     close-idle-sessions: true
+jwt:
+  secret : ${JWT_SECRET}
+football:
+  service:
+    endpoints:
+      login: ${BASE_URL}/login
+      tournament: ${BASE_URL}/tournaments

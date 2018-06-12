@@ -6,6 +6,6 @@ package football.analyze.security;
  */
 public interface SecurityService {
 
-    User authenticate(String username, String password);
+    String authenticate(String username, String password);
 
 }

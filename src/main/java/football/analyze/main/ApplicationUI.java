@@ -14,6 +14,9 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.UI;
 import elemental.json.JsonArray;
+import football.analyze.main.data.schedule.ScheduleLoader;
+import football.analyze.security.JWTService;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PreDestroy;
@@ -26,13 +29,22 @@ import javax.annotation.PreDestroy;
 @Slf4j
 public class ApplicationUI extends UI implements DetachListener {
 
+    @Getter
+    private final ScheduleLoader scheduleLoader;
+
+    private final JWTService jwtService;
+
     private Menu menu;
+
+    public ApplicationUI(ScheduleLoader scheduleLoader, JWTService jwtService) {
+        this.scheduleLoader = scheduleLoader;
+        this.jwtService = jwtService;
+    }
 
     @Override
     protected void init(VaadinRequest request) {
         String jwtToken = (String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN");
-        if (jwtToken != null && jwtToken.equals("something")) {
-            log.error("Logged in");
+        if (jwtToken != null && jwtService.isAdmin(jwtToken)) {
             this.menu = new Menu(true);
         } else {
             this.menu = new Menu(false);

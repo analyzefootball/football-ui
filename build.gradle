@@ -29,6 +29,7 @@ dependencies {
             ['com.vaadin:vaadin-icons:3.0.1'],
             ['com.google.code.gson:gson:2.8.5'],
             ['org.apache.commons:commons-lang3:3.7'],
+            ['com.auth0:java-jwt:3.3.0'],
             ['org.slf4j:slf4j-api:1.7.25']
     )
     compileOnly(

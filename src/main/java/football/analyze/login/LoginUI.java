@@ -11,7 +11,6 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import football.analyze.security.SecurityService;
-import football.analyze.security.User;
 
 @SpringUI(path = "/Login")
 @Theme("football")
@@ -107,17 +106,14 @@ public class LoginUI extends UI {
     }
 
     private void login() {
-        User user = securityService.authenticate(username.getValue(), password.getValue());
-        //if (user != null && user.getCredentials() != null && user.getCredentials().getJwtToken() != null) {
-        VaadinSession.getCurrent().setAttribute("JWT_TOKEN", "something");
-        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(1800);
-        //applicationContext.publishEvent(new LoginEvent());
-        //menu.showAdmin();
-        getUI().getPage().setLocation("/");
-        //}
-        //else    {
-        login.setEnabled(true);
-        //  Notification.show("Invalid Username/Password", Notification.Type.ERROR_MESSAGE);
-        //}
+        String jwtToken = securityService.authenticate(username.getValue(), password.getValue());
+        if (jwtToken != null) {
+            VaadinSession.getCurrent().setAttribute("JWT_TOKEN", jwtToken);
+            VaadinSession.getCurrent().getSession().setMaxInactiveInterval(1800);
+            getUI().getPage().setLocation("/");
+        } else {
+            login.setEnabled(true);
+            Notification.show("Invalid Username/Password", Notification.Type.ERROR_MESSAGE);
+        }
     }
 }

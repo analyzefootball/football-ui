@@ -16,16 +16,14 @@ import lombok.Getter;
  * @author Hassan Mushtaq
  * @since 6/1/18
  */
-public class Menu {
-
-    private HMButton adminButton;
+class Menu {
 
     private HMButton signOutButton;
 
     @Getter
     private HybridMenu hybridMenu;
 
-    public Menu(boolean admin) {
+    Menu(boolean admin) {
         hybridMenu = HybridMenu.get()
                 .withNaviContent(new Home())
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
@@ -84,7 +82,7 @@ public class Menu {
 
     }
 
-    public void addSignOutListener(Button.ClickListener listener) {
+    void addSignOutListener(Button.ClickListener listener) {
         signOutButton.addClickListener(listener);
     }
 }

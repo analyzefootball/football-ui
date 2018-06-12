@@ -1,6 +1,7 @@
 package football.analyze.security;
 
 import football.analyze.common.Entity;
+import football.analyze.main.data.play.Team;
 import lombok.Getter;
 
 /**
@@ -15,24 +16,31 @@ public class User extends Entity {
 
     private Role role;
 
-    private Credentials credentials;
+    private String username;
+
+    private String password;
+
+    private Team favoriteTeam;
 
     //For jackson mapper
     private User() {
         //super();
     }
 
-    public User(String displayName, Role role, Credentials credentials) {
-        super();
+    public User(String displayName, Role role, String username, String password, Team favoriteTeam) {
         this.displayName = displayName;
         this.role = role;
-        this.credentials = credentials;
+        this.username = username;
+        this.password = password;
+        this.favoriteTeam = favoriteTeam;
     }
 
-    public User(String id, String displayName, Role role, Credentials credentials) {
+    public User(String id, String displayName, Role role, String username, String password, Team favoriteTeam) {
         super(id);
         this.displayName = displayName;
         this.role = role;
-        this.credentials = credentials;
+        this.username = username;
+        this.password = password;
+        this.favoriteTeam = favoriteTeam;
     }
 }
