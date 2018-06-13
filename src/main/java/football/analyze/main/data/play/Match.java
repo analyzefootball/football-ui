@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 /**
  * @author Hassan Mushtaq
@@ -30,6 +34,8 @@ public class Match {
     @Setter
     private Integer awayTeamScore;
 
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy 'at' HH:mm z");
+
     private Match() {
     }
 
@@ -39,5 +45,11 @@ public class Match {
         this.dateTime = dateTime;
         this.matchNumber = matchNumber;
         this.matchType = matchType;
+    }
+
+    public String getDateTimeFormatted(ZoneId zoneId) {
+        ZonedDateTime actualMatchTime = getDateTime().atZone(TimeZone.getDefault().toZoneId());
+        ZonedDateTime userLocaleMatchTime = actualMatchTime.withZoneSameInstant(zoneId);
+        return dateTimeFormatter.format(userLocaleMatchTime);
     }
 }
