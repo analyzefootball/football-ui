@@ -1,6 +1,8 @@
 package football.analyze.main.data.play;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -8,10 +10,12 @@ import java.time.LocalDateTime;
  * @author Hassan Mushtaq
  * @since 6/11/18
  */
+@NoArgsConstructor
 public class Prediction {
 
     @Getter
-    private final Match match;
+    @Setter
+    private Match match;
 
     public Prediction(Match match) {
         this.match = match;

@@ -14,8 +14,10 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.UI;
 import elemental.json.JsonArray;
+import football.analyze.main.data.prediction.PredictionLoader;
 import football.analyze.main.data.schedule.ScheduleLoader;
 import football.analyze.security.JWTService;
+import football.analyze.security.SecurityService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +34,20 @@ public class ApplicationUI extends UI implements DetachListener {
     @Getter
     private final ScheduleLoader scheduleLoader;
 
+    @Getter
+    private final PredictionLoader predictionLoader;
+
+    @Getter
+    private final SecurityService securityService;
+
     private final JWTService jwtService;
 
     private Menu menu;
 
-    public ApplicationUI(ScheduleLoader scheduleLoader, JWTService jwtService) {
+    public ApplicationUI(ScheduleLoader scheduleLoader, PredictionLoader predictionLoader, SecurityService securityService, JWTService jwtService) {
         this.scheduleLoader = scheduleLoader;
+        this.predictionLoader = predictionLoader;
+        this.securityService = securityService;
         this.jwtService = jwtService;
     }
 
@@ -58,6 +68,7 @@ public class ApplicationUI extends UI implements DetachListener {
         getNavigator().addViewChangeListener(new ViewChangeFilter(getUI()));
 
         setContent(menu.getHybridMenu());
+        setSizeFull();
 
         JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
             private static final long serialVersionUID = 1L;

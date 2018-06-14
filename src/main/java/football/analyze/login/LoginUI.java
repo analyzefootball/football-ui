@@ -10,6 +10,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import football.analyze.security.JWTService;
 import football.analyze.security.SecurityService;
 
 @SpringUI(path = "/Login")
@@ -28,8 +29,11 @@ public class LoginUI extends UI {
 
     private final SecurityService securityService;
 
-    public LoginUI(SecurityService securityService) {
+    private final JWTService jwtService;
+
+    public LoginUI(SecurityService securityService, JWTService jwtService) {
         this.securityService = securityService;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -111,6 +115,7 @@ public class LoginUI extends UI {
         String jwtToken = securityService.authenticate(username.getValue(), password.getValue());
         if (jwtToken != null) {
             VaadinSession.getCurrent().setAttribute("JWT_TOKEN", jwtToken);
+            VaadinSession.getCurrent().setAttribute("USERNAME", jwtService.getUsername(jwtToken));
             VaadinSession.getCurrent().getSession().setMaxInactiveInterval(1800);
             getUI().getPage().setLocation("/");
         } else {

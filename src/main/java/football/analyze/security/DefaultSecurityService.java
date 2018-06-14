@@ -69,4 +69,13 @@ public class DefaultSecurityService implements SecurityService {
         ResponseEntity<Void> response = restTemplate.postForEntity(signupURL + "/" + invitationId, entity, Void.class);
         return response.getStatusCode().equals(HttpStatus.CREATED);
     }
+
+    @Override
+    public boolean sendInvite(Invitation invitation, String tokenWithBearer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HEADER_STRING, tokenWithBearer);
+        HttpEntity<Invitation> entity = new HttpEntity<>(invitation, headers);
+        ResponseEntity<Void> response = restTemplate.postForEntity(invitationURL, entity, Void.class);
+        return response.getStatusCode().equals(HttpStatus.CREATED);
+    }
 }

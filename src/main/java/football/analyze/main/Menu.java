@@ -45,7 +45,12 @@ class Menu {
                 .withNavigateTo(Home.class)));
 
         leftMenu.add(HMButton.get()
-                .withCaption("Predictions")
+                .withCaption("My Predictions")
+                .withIcon(VaadinIcons.MEGAFONE)
+                .withNavigateTo(MyPredictions.class));
+
+        leftMenu.add(HMButton.get()
+                .withCaption("All Predictions")
                 .withIcon(VaadinIcons.MEGAFONE)
                 .withNavigateTo(Prediction.class));
 

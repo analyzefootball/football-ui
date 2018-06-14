@@ -14,8 +14,6 @@ import football.analyze.main.data.schedule.ScheduleLoader;
 import lombok.NoArgsConstructor;
 
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -31,20 +29,29 @@ public class Schedule extends VerticalLayout implements View {
         ZoneId zoneId = ZoneId.of(event.getNavigator().getUI().getPage().getWebBrowser().getTimeZoneId());
 
         Grid<Match> grid = new Grid<>();
+        grid.setCaption("World Cup Schedule");
         grid.setItems(matches);
         grid.setSizeFull();
         grid.setHeightMode(HeightMode.ROW);
         grid.setHeightByRows(matches.size());
 
-        grid.addColumn(Match::getMatchNumber).setCaption("Match Number");
-        grid.addComponentColumn((ValueProvider<Match, Component>) match -> matchDetail(match)).setCaption("Match");
-        grid.addColumn((ValueProvider<Match, String>) match -> match.getDateTimeFormatted(zoneId)).setCaption("Your Local Time");
-        grid.addColumn((ValueProvider<Match, String>) match -> match.getDateTimeFormatted(TimeZone.getDefault().toZoneId())).setCaption("UTC Time");
+        grid.addColumn(Match::getMatchNumber).setCaption("Match Number").setWidth(150).setResizable(false);
+        grid.addComponentColumn((ValueProvider<Match, Component>) this::matchDetail).setCaption("Match")
+                .setResizable(false)
+                .setSortable(false).setExpandRatio(1);
+        ;
+        grid.addColumn((ValueProvider<Match, String>) match -> match.getDateTimeFormatted(zoneId))
+                .setCaption("Your Local Time")
+                .setResizable(false)
+                .setWidth(300);
+        grid.addColumn((ValueProvider<Match, String>) match -> match.getDateTimeFormatted(TimeZone.getDefault().toZoneId()))
+                .setCaption("UTC Time")
+                .setResizable(false)
+                .setWidth(300);
 
-        Panel panel = new Panel("World Cup Schedule");
-        panel.setSizeFull();
-        panel.setContent(grid);
-        addComponent(panel);
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
+        setSizeFull();
+        addComponent(grid);
     }
 
     private HorizontalLayout matchDetail(Match match) {
@@ -64,8 +71,12 @@ public class Schedule extends VerticalLayout implements View {
         if (awayTeam.getFlagUrl() != null) {
             awayTeamLabel.setIcon(new ExternalResource(awayTeam.getFlagUrl()));
         }
-        matchDetail.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
         matchDetail.addComponents(homeTeamLabel, versus, awayTeamLabel);
+        matchDetail.setComponentAlignment(homeTeamLabel, Alignment.MIDDLE_RIGHT);
+        matchDetail.setComponentAlignment(versus, Alignment.MIDDLE_CENTER);
+        matchDetail.setComponentAlignment(awayTeamLabel, Alignment.MIDDLE_LEFT);
+        matchDetail.setSizeFull();
         return matchDetail;
     }
 }

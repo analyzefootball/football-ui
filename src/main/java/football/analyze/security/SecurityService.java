@@ -13,4 +13,6 @@ public interface SecurityService {
     Invitation fetchInviteEmail(String invitationId);
 
     boolean registerUser(String invitationId, User user);
+
+    boolean sendInvite(Invitation invitation, String tokenWithBearer);
 }

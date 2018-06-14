@@ -26,7 +26,7 @@ public class JWTService {
         this.jwtSecret = jwtSecret;
     }
 
-    public boolean isAdmin(String jwtToken)  {
+    public boolean isAdmin(String jwtToken) {
         try {
             Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -34,10 +34,22 @@ public class JWTService {
             DecodedJWT jwt = verifier.verify(jwtToken.replace(TOKEN_PREFIX, ""));
             Claim claim = jwt.getClaim("admin");
             return claim.asBoolean();
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public String getUsername(String jwtToken) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build();
+            DecodedJWT jwt = verifier.verify(jwtToken.replace(TOKEN_PREFIX, ""));
+            return jwt.getSubject();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

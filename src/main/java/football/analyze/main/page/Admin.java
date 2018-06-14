@@ -5,9 +5,12 @@ import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
+import football.analyze.main.ApplicationUI;
 import football.analyze.provision.Invitation;
 import football.analyze.security.Role;
+import football.analyze.security.SecurityService;
 
 import java.util.Arrays;
 
@@ -24,11 +27,10 @@ public class Admin extends VerticalLayout implements View {
         layout.setIcon(VaadinIcons.MAILBOX);
 
         TextField emailField = new TextField("username/email");
-        emailField.setReadOnly(true);
         emailField.setWidth("300px");
 
 
-        NativeSelect<Role> roleSelect = new NativeSelect<>("Select role", Arrays.asList(Role.values()));
+        NativeSelect<Role> roleSelect = new NativeSelect<>("Select role", Arrays.asList(Role.ADMIN, Role.REGULAR));
 
         roleSelect.setEmptySelectionAllowed(false);
 
@@ -52,7 +54,16 @@ public class Admin extends VerticalLayout implements View {
         Button sendInvite = new Button("Send Invite");
         sendInvite.setEnabled(false);
         sendInvite.addClickListener(
-                event -> sendInvite(binder.getBean()));
+                event -> {
+                    sendInvite.setEnabled(false);
+                    boolean success = sendInvite(binder.getBean());
+                    if (success)    {
+                        Notification.show("Invitation Sent Successfully", Notification.Type.HUMANIZED_MESSAGE);
+                    } else  {
+                        Notification.show("Failed to send notification", Notification.Type.ERROR_MESSAGE);
+                    }
+                    binder.setBean(new Invitation("", Role.REGULAR));
+                });
 
         binder.addStatusChangeListener(
                 event -> sendInvite.setEnabled(binder.isValid()));
@@ -64,7 +75,9 @@ public class Admin extends VerticalLayout implements View {
 
     }
 
-    private void sendInvite(Invitation invitation) {
-
+    private boolean sendInvite(Invitation invitation) {
+        String jwtToken = (String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN");
+        SecurityService securityService = ((ApplicationUI) UI.getCurrent()).getSecurityService();
+        return securityService.sendInvite(invitation, jwtToken);
     }
 }

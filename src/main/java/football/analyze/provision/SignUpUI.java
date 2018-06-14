@@ -99,7 +99,7 @@ public class SignUpUI extends UI {
             Label validationStatus = new Label();
             binder.setStatusLabel(validationStatus);
 
-            binder.setBean(new User("", invitation.getRole(), invitation.getEmail(), "", null));
+            binder.setBean(new User("", invitation.getRole(), invitation.getEmail(), "", null, null));
 
             Button registerButton = new Button("Register");
             registerButton.setEnabled(false);
