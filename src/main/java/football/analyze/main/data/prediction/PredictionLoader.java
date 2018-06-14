@@ -1,5 +1,7 @@
 package football.analyze.main.data.prediction;
 
+import football.analyze.main.data.play.PlayedMatch;
+import football.analyze.main.data.play.PlayedMatches;
 import football.analyze.main.data.play.Prediction;
 import football.analyze.security.User;
 import lombok.extern.slf4j.Slf4j;
@@ -47,23 +49,23 @@ public class PredictionLoader {
         return predictions;
     }
 
-    public List<Prediction> getAllPredictions(String tokenWithBearer) {
+    public List<PlayedMatch> getAllPredictions(String tokenWithBearer) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HEADER_STRING, tokenWithBearer);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<User> responseEntity = restTemplate.exchange(userUrl,
-                HttpMethod.GET, entity, User.class);
-        List<Prediction> predictions = responseEntity.getBody().getPredictions();
-        predictions.sort(Comparator.comparing(prediction -> prediction.getMatch().getMatchNumber()));
-        return predictions;
+        ResponseEntity<PlayedMatches> responseEntity = restTemplate.exchange(predictionUrl,
+                HttpMethod.GET, entity, PlayedMatches.class);
+        List<PlayedMatch> playedMatches = responseEntity.getBody().get_embedded().getPlayedMatchList();
+        playedMatches.sort(Comparator.comparingInt(PlayedMatch::getMatchNumber).reversed());
+        return playedMatches;
     }
 
-    public boolean savePrediction(String tokenWithBearer, String username, Prediction prediction)   {
+    public boolean savePrediction(String tokenWithBearer, String username, Prediction prediction) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HEADER_STRING, tokenWithBearer);
         HttpEntity<Prediction> entity = new HttpEntity<>(prediction, headers);
-        ResponseEntity<Void> response = restTemplate.postForEntity(predictionUrl+"/"+username, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.postForEntity(predictionUrl + "/" + username, entity, Void.class);
         return response.getStatusCode().equals(HttpStatus.OK);
     }
 }
