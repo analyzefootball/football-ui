@@ -10,7 +10,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Setter;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.*;
 import football.analyze.main.ApplicationUI;
@@ -25,11 +24,17 @@ import java.util.List;
 public class MyPredictions extends VerticalLayout implements View {
     private static final long serialVersionUID = 1L;
 
+    private String jwtToken;
+
+    private String username;
+
+    private PredictionLoader predictionLoader;
+
     @Override
     public void enter(ViewChangeEvent event) {
-        String jwtToken = (String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN");
-        String username = (String) VaadinSession.getCurrent().getAttribute("USERNAME");
-        PredictionLoader predictionLoader = ((ApplicationUI) UI.getCurrent()).getPredictionLoader();
+        jwtToken = (String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN");
+        username = (String) VaadinSession.getCurrent().getAttribute("USERNAME");
+        predictionLoader = ((ApplicationUI) UI.getCurrent()).getPredictionLoader();
         List<Prediction> predictions = predictionLoader.getPredictions(jwtToken, username);
 
         Grid<Prediction> grid = new Grid<>();
@@ -106,7 +111,7 @@ public class MyPredictions extends VerticalLayout implements View {
                         (Setter<Prediction, String>) (prediction12, s) -> prediction12.getMatch().setAwayTeamScore(Integer.parseInt(s)));
         awayScoreField.setReadOnly(prediction.isLocked());
 
-        if (!prediction.isLocked())  {
+        if (!prediction.isLocked()) {
             binder.addStatusChangeListener(
                     event -> {
                         if (binder.isValid()) {
@@ -126,8 +131,12 @@ public class MyPredictions extends VerticalLayout implements View {
     }
 
     private void savePrediction(Prediction prediction) {
-        if (prediction.getMatch().getHomeTeamScore()!=null && prediction.getMatch().getAwayTeamScore()!=null)   {
-            Notification.show("Prediction saved", Notification.Type.TRAY_NOTIFICATION);
+        if (prediction.getMatch().getHomeTeamScore() != null && prediction.getMatch().getAwayTeamScore() != null) {
+            if (predictionLoader.savePrediction(jwtToken, username, prediction)) {
+                Notification.show("Prediction saved", Notification.Type.TRAY_NOTIFICATION);
+            } else {
+                Notification.show("Some error occured, contact admin", Notification.Type.ERROR_MESSAGE);
+            }
         }
     }
 }
