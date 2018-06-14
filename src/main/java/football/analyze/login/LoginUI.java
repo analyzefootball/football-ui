@@ -116,7 +116,7 @@ public class LoginUI extends UI {
         if (jwtToken != null) {
             VaadinSession.getCurrent().setAttribute("JWT_TOKEN", jwtToken);
             VaadinSession.getCurrent().setAttribute("USERNAME", jwtService.getUsername(jwtToken));
-            VaadinSession.getCurrent().getSession().setMaxInactiveInterval(1800);
+            VaadinSession.getCurrent().getSession().setMaxInactiveInterval(-1);
             getUI().getPage().setLocation("/");
         } else {
             login.setEnabled(true);
