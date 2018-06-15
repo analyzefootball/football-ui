@@ -3,7 +3,6 @@ server:
   servlet:
     session:
       timeout: 30m
-      cookie.max-age: 30m
 management:
   endpoint:
     health:
@@ -11,7 +10,7 @@ management:
 vaadin:
   servlet:
     production-mode: true
-    close-idle-sessions: true
+    close-idle-sessions: false
 jwt:
   secret : ${JWT_SECRET}
 football:

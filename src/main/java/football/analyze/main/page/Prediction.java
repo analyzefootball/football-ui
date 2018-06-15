@@ -3,6 +3,7 @@ package football.analyze.main.page;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
@@ -31,15 +32,17 @@ public class Prediction extends VerticalLayout implements View {
             panel.setCaptionAsHtml(true);
             panel.setCaption(panelCaptionAsHTML(playedMatch));
             VerticalLayout verticalLayout = new VerticalLayout();
-            verticalLayout.setSpacing(false);
+            verticalLayout.setSpacing(true);
             verticalLayout.setSizeFull();
             playedMatch.getUserMatchPredictions().forEach(userMatchPrediction -> {
                 Label label = new Label();
-                label.setValue(userMatchPrediction.getUser() + ": "
-                        + playedMatch.getHomeTeam().getName() + " "
-                        + userMatchPrediction.getHomeTeamScore() + " "
-                        + playedMatch.getAwayTeam().getName() + " "
-                        + userMatchPrediction.getAwayTeamScore());
+                label.setContentMode(ContentMode.HTML);
+                label.setValue("<span>" + userMatchPrediction.getUser() + ":&nbsp;&nbsp;&nbsp;&nbsp;"
+                        + playedMatch.getHomeTeam().getName() + "&nbsp;&nbsp;&nbsp;&nbsp;"
+                        + userMatchPrediction.getHomeTeamScore() + "&nbsp;&nbsp;&nbsp;&nbsp;"
+                        + playedMatch.getAwayTeam().getName() + "&nbsp;&nbsp;&nbsp;&nbsp;"
+                        + userMatchPrediction.getAwayTeamScore()
+                        + "</span></br>");
                 verticalLayout.addComponent(label);
             });
             panel.setContent(verticalLayout);

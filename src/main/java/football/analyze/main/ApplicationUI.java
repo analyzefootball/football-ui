@@ -53,7 +53,6 @@ public class ApplicationUI extends UI implements DetachListener {
 
     @Override
     protected void init(VaadinRequest request) {
-        setPollInterval(5000);
         String jwtToken = (String) VaadinSession.getCurrent().getAttribute("JWT_TOKEN");
         if (jwtToken != null && jwtService.isAdmin(jwtToken)) {
             this.menu = new Menu(true);
