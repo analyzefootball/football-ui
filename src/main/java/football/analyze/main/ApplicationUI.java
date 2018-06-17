@@ -14,6 +14,7 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.UI;
 import elemental.json.JsonArray;
+import football.analyze.main.data.points.PointsLoader;
 import football.analyze.main.data.prediction.PredictionLoader;
 import football.analyze.main.data.schedule.ScheduleLoader;
 import football.analyze.security.JWTService;
@@ -38,15 +39,19 @@ public class ApplicationUI extends UI implements DetachListener {
     private final PredictionLoader predictionLoader;
 
     @Getter
+    private final PointsLoader pointsLoader;
+
+    @Getter
     private final SecurityService securityService;
 
     private final JWTService jwtService;
 
     private Menu menu;
 
-    public ApplicationUI(ScheduleLoader scheduleLoader, PredictionLoader predictionLoader, SecurityService securityService, JWTService jwtService) {
+    public ApplicationUI(ScheduleLoader scheduleLoader, PredictionLoader predictionLoader, PointsLoader pointsLoader, SecurityService securityService, JWTService jwtService) {
         this.scheduleLoader = scheduleLoader;
         this.predictionLoader = predictionLoader;
+        this.pointsLoader = pointsLoader;
         this.securityService = securityService;
         this.jwtService = jwtService;
     }

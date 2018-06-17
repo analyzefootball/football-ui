@@ -22,3 +22,4 @@ football:
       register: ${BASE_URL}/signup
       user: ${BASE_URL}/users
       prediction: ${BASE_URL}/predictions
+      points: ${BASE_URL}/points
