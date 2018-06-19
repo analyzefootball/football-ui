@@ -53,9 +53,13 @@ public class Prediction extends VerticalLayout implements View {
     }
 
     private String panelCaptionAsHTML(PlayedMatch playedMatch) {
+        String scoreString = "&nbsp;&nbsp;v.&nbsp;&nbsp;";
+        if (playedMatch.getHomeTeamScore() != null && playedMatch.getAwayTeamScore() != null) {
+            scoreString = "&nbsp;&nbsp;<b>" + playedMatch.getHomeTeamScore() + "&nbsp;-&nbsp;" + playedMatch.getAwayTeamScore() + "</b>&nbsp;&nbsp;";
+        }
         String caption = "<img src=\"" + playedMatch.getHomeTeam().getFlagUrl() + "\" alt=\"" + playedMatch.getHomeTeam().getName() + "\"/>" +
                 "&nbsp;<b>" + playedMatch.getHomeTeam().getName() + "</b>" +
-                "&nbsp;&nbsp;v.&nbsp;&nbsp;" +
+                scoreString +
                 "<img src=\"" + playedMatch.getAwayTeam().getFlagUrl() + "\" alt=\"" + playedMatch.getAwayTeam().getName() + "\"/>" +
                 "&nbsp;<b>" + playedMatch.getAwayTeam().getName() + "</b>";
         return caption;
