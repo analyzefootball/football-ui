@@ -19,6 +19,7 @@ import football.analyze.main.data.play.Team;
 import football.analyze.main.data.prediction.PredictionLoader;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class MyPredictions extends VerticalLayout implements View {
@@ -59,6 +60,15 @@ public class MyPredictions extends VerticalLayout implements View {
                 .setWidth(100);
 
         grid.setSelectionMode(Grid.SelectionMode.NONE);
+
+        grid.setStyleGenerator((StyleGenerator<Prediction>) item -> {
+            LocalDate yesterday = LocalDate.now().minusDays(1);
+            LocalDate tomorrow = LocalDate.now().plusDays(1);
+            if (!item.isLocked() && item.getMatch().getDateTime().isAfter(yesterday.atStartOfDay()) && (item.getMatch().getDateTime().isBefore(tomorrow.atStartOfDay()))) {
+                return "locked current";
+            }
+            return "";
+        });
 
         setSizeFull();
         addComponent(grid);

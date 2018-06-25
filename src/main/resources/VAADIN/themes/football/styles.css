@@ -15586,3 +15586,12 @@ div.v-layout.v-horizontal.v-widget {
 .football .hybridMenu .rootContent .v-slot-contentBox .contentBox > .v-margin-top {
 	padding-top: 0 !important;
 }
+
+tr.locked {
+	background-color: darkgrey;
+}
+
+tr.current {
+	color: red;
+	font-weight: bold;
+}
