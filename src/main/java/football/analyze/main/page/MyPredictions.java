@@ -107,7 +107,7 @@ public class MyPredictions extends VerticalLayout implements View {
         binder.forField(homeScoreField)
                 .withValidator(new PositiveIntegerValidator("Must be a number"))
                 .bind(((ValueProvider<Prediction, String>) prediction13 -> prediction13.getMatch().getHomeTeamScore() == null ? "" : prediction13.getMatch().getHomeTeamScore().toString()),
-                        (Setter<Prediction, String>) (prediction12, s) -> prediction12.getMatch().setHomeTeamScore(Integer.parseInt(s)));
+                        (Setter<Prediction, String>) (prediction12, s) -> prediction12.getMatch().setHomeTeamScore(parsetInteger(s)));
 
         homeScoreField.setReadOnly(prediction.isLocked());
 
@@ -118,7 +118,7 @@ public class MyPredictions extends VerticalLayout implements View {
         binder.forField(awayScoreField)
                 .withValidator(new PositiveIntegerValidator("Must be a number"))
                 .bind(((ValueProvider<Prediction, String>) prediction13 -> prediction13.getMatch().getAwayTeamScore() == null ? "" : prediction13.getMatch().getAwayTeamScore().toString()),
-                        (Setter<Prediction, String>) (prediction12, s) -> prediction12.getMatch().setAwayTeamScore(Integer.parseInt(s)));
+                        (Setter<Prediction, String>) (prediction12, s) -> prediction12.getMatch().setAwayTeamScore(parsetInteger(s)));
         awayScoreField.setReadOnly(prediction.isLocked());
 
         if (!prediction.isLocked()) {
@@ -147,6 +147,14 @@ public class MyPredictions extends VerticalLayout implements View {
             } else {
                 Notification.show("Some error occured, contact admin", Notification.Type.ERROR_MESSAGE);
             }
+        }
+    }
+
+    private Integer parsetInteger(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (Exception e)   {
+            return null;
         }
     }
 }

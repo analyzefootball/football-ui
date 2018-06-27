@@ -4,10 +4,7 @@ import football.analyze.main.data.play.Match;
 import football.analyze.main.data.play.Tournament;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +25,7 @@ public class ScheduleLoader {
 
     private final String scheduleUrl;
 
+
     public ScheduleLoader(RestTemplate restTemplate,
                           @Value("${football.service.endpoints.tournament}") String scheduleUrl) {
         this.restTemplate = restTemplate;
@@ -44,5 +42,12 @@ public class ScheduleLoader {
         List<Match> matches = responseEntity.getBody().getSchedule().getMatches();
         matches.sort(Comparator.comparing(Match::getMatchNumber));
         return matches;
+    }
+
+    public void saveMatch(String tokenWithBearer, Match match) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HEADER_STRING, tokenWithBearer);
+        HttpEntity<Match> entity = new HttpEntity<>(match, headers);
+        restTemplate.put(scheduleUrl + "/Fifa 2018 World Cup/match", entity);
     }
 }

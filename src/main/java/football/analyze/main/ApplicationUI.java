@@ -44,6 +44,7 @@ public class ApplicationUI extends UI implements DetachListener {
     @Getter
     private final SecurityService securityService;
 
+    @Getter
     private final JWTService jwtService;
 
     private Menu menu;

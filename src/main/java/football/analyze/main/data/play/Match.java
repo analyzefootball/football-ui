@@ -52,4 +52,8 @@ public class Match {
         ZonedDateTime userLocaleMatchTime = actualMatchTime.withZoneSameInstant(zoneId);
         return dateTimeFormatter.format(userLocaleMatchTime);
     }
+
+    public boolean isMatchStarted() {
+        return LocalDateTime.now().isAfter(dateTime);
+    }
 }
